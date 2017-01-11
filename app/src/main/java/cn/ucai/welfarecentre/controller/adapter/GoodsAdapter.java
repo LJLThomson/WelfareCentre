@@ -24,6 +24,21 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     ArrayList<NewGoodsBean> contactList;
     final int TYPE_ITEM = 0;
     final int TYPE_FOOTER = 1;
+    boolean isMore;//由来判断是否到最后了，这时没有数据可加载了
+    String footerText;
+
+    public void setFooterText(String footerText) {
+        this.footerText = footerText;
+    }
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+    }
+
     public GoodsAdapter(Context context, ArrayList<NewGoodsBean> contactList) {
         this.context = context;
         this.contactList = contactList;
@@ -51,7 +66,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_FOOTER){
             FooterViewHodler footerViewHodler = (FooterViewHodler) holder;
-            footerViewHodler.footer.setText("页脚");
+            footerViewHodler.footer.setText(footerText);
             return;
         }
         NewGoodsBean goods = contactList.get(position);//
@@ -77,10 +92,15 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void initData(ArrayList<NewGoodsBean> list) {
-        if (contactList != null){
-            contactList.clear();
+        if (this.contactList != null){
+            this.contactList.clear();
         }
-        contactList.addAll(list);
+        this.contactList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addinitData(ArrayList<NewGoodsBean> list) {
+        this.contactList.addAll(list);
         notifyDataSetChanged();
     }
 

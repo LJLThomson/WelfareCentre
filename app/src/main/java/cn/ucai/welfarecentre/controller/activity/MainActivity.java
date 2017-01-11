@@ -1,30 +1,39 @@
 package cn.ucai.welfarecentre.controller.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.controller.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    RadioButton[] rad ;
+    RadioButton[] rad;
     int index;
+    @BindView(R.id.frameLayout)
+    FrameLayout frameLayout;
     @BindView(R.id.boutique)
     RadioButton boutique;
     @BindView(R.id.cart)
     RadioButton cart;
     @BindView(R.id.category)
     RadioButton category;
+    @BindView(R.id.textView)
+    TextView textView;
     @BindView(R.id.new_goods)
     RadioButton newGoods;
     @BindView(R.id.personCentre)
     RadioButton personCentre;
-    @BindView(R.id.activity_main)
-    RelativeLayout activityMain;
+    @BindView(R.id.line1)
+    LinearLayout line1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.frameLayout, new NewGoodsFragment()).commit();
     }
 
     private void initView() {

@@ -21,6 +21,7 @@ import cn.ucai.welfarecentre.Model.net.ModelNewGoods;
 import cn.ucai.welfarecentre.Model.net.OnCompleteListener;
 import cn.ucai.welfarecentre.Model.utils.ConvertUtils;
 import cn.ucai.welfarecentre.Model.utils.I;
+import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.Model.utils.L;
 import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.controller.adapter.GoodsAdapter;
@@ -36,12 +37,18 @@ public class NewGoodsFragment extends Fragment {
     @BindView(R.id.rvContact)
     RecyclerView rvContact;
     @BindView(R.id.tvRefreshLayout)
+
     SwipeRefreshLayout tvRefreshLayout;
     GridLayoutManager mlayout;
     GoodsAdapter mAdapter;
     ArrayList<NewGoodsBean> mList;
     ModelNewGoods model;
-    int pageId = 1;//默认是0
+
+    int pageId = 1;//默认是0，页面pageSize默认是10页，也可以根据自行调整
+    final static int ACTION_LOADING = 0;
+    final static int ACTION_UP = 1;//上拉加载
+    final static int ACTION_DOWN = 2;//下拉刷新
+    int mNewState;
     public NewGoodsFragment() {
         // Required empty public constructor
     }
@@ -55,18 +62,79 @@ public class NewGoodsFragment extends Fragment {
         ButterKnife.bind(this, view);
         initView();
         model = new ModelNewGoods();
-        initData();//下载数据
+        initData(ACTION_LOADING);//下载数据
+        setListener();
         return view;
     }
 
-    private void initData() {
+    private void setListener() {
+        setPulldown();
+        setRefreshDown();
+    }
+
+    private void setRefreshDown() {
+        tvRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tvRefreshLayout.setRefreshing(true);//转动东西开始
+                tvRefreshLayout.setEnabled(true);
+                tvRefreshHint.setVisibility(View.VISIBLE);
+                pageId = 1;
+                initData(ACTION_DOWN);
+            }
+        });
+    }
+
+    private void setPulldown() {
+        rvContact.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                mNewState = newState;
+                int lastPosition = mlayout.findLastVisibleItemPosition();
+                if (lastPosition >= mAdapter.getItemCount()-1 && mNewState == RecyclerView.SCROLL_STATE_IDLE
+                        && mAdapter.isMore()){//lastPostion == getItemCount-1;
+                    pageId++;
+                    initData(ACTION_UP);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+    private void initData(final int action) {
 //        ddwnData下载
         model.downData(getContext(), I.CAT_ID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                mAdapter.setMore(result !=null && result.length>0);//不到最后全为true，
+                if (!mAdapter.isMore()){//最后一页
+                    if (action == ACTION_UP){
+                        mAdapter.setFooterText("没有数据可加载了");
+                    }
+                    return;
+                }
+                mAdapter.setFooterText("加载数据");
                 ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                 L.i(TAG,"List.size =  "+ list.size());
-                mAdapter.initData(list);
+                switch (action){
+                    case ACTION_LOADING://第一次加载
+                        mAdapter.initData(list);
+                        break;
+                    case ACTION_UP://上拉加载
+                        mAdapter.addinitData(list);
+                        break;
+                    case ACTION_DOWN://下拉刷新
+                        mAdapter.initData(list);
+                        tvRefreshHint.setVisibility(View.GONE);
+                        tvRefreshLayout.setRefreshing(false);//不可见
+                        ImageLoader.release();
+                        break;
+                }
             }
 
             @Override
