@@ -3,7 +3,7 @@ package cn.ucai.welfarecentre.application;
 import android.app.Application;
 
 /**
- * Created by Administrator on 2017/1/10 0010.
+ * Created by Administrator on 2017/1/11 0011.
  */
 
 public class FuLiCentreApplication extends Application {
@@ -22,6 +22,6 @@ public class FuLiCentreApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = getInstance();
+        instance = this;
     }
 }
