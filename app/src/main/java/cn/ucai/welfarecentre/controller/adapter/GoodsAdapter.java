@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.view.FooterViewHodler;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -26,6 +27,10 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     final int TYPE_FOOTER = 1;
     boolean isMore;//由来判断是否到最后了，这时没有数据可加载了
     String footerText;
+
+    public int getFooterText() {
+        return isMore?R.string.load_more:R.string.no_more;
+    }
 
     public void setFooterText(String footerText) {
         this.footerText = footerText;
@@ -66,7 +71,9 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_FOOTER){
             FooterViewHodler footerViewHodler = (FooterViewHodler) holder;
-            footerViewHodler.footer.setText(footerText);
+//            footerViewHodler.footer.setText(footerText);
+            footerViewHodler.footer.setText(context.getString(getFooterText()));
+//            footerViewHodler.footer.setText(context.getString(id));//可以获取string.xml中的文件
             return;
         }
         NewGoodsBean goods = contactList.get(position);//
@@ -104,13 +111,6 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    static class FooterViewHodler extends RecyclerView.ViewHolder{
-        TextView footer;
-        public FooterViewHodler(View itemView) {
-            super(itemView);
-            footer = (TextView) itemView.findViewById(R.id.footer);
-        }
-    }
     static class  NewGoodsViewHolder extends RecyclerView.ViewHolder{
         ImageView ipicture;
         TextView Newgoods,good_price;

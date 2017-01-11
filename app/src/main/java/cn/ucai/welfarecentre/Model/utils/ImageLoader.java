@@ -342,7 +342,7 @@ public class ImageLoader {
             mCaches=null;
         }
     }
-
+    /** 下载图片通用的请求字段 String IMAGE_URL="imageurl";*/
     public static void downloadImg(Context context,ImageView imageView,String thumb){
         setImage(I.DOWNLOAD_IMG_URL+thumb,context,imageView,true);
     }

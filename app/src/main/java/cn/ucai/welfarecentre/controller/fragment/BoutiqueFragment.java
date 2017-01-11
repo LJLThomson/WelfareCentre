@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +30,16 @@ import cn.ucai.welfarecentre.view.SpaceItemDecoration;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewGoodsFragment extends Fragment {
+public class BoutiqueFragment extends Fragment {
     private final static String TAG = NewGoodsFragment.class.getSimpleName();//源代码中的基础类的简单名称
 
-    @BindView(R.id.tvRefreshHint)
-    TextView tvRefreshHint;
-    @BindView(R.id.rvContact)
-    RecyclerView rvContact;
-    @BindView(R.id.tvRefreshLayout)
-    SwipeRefreshLayout tvRefreshLayout;
+    @BindView(R.id.mRefreshHint)
+    TextView mRefreshHint;
+    @BindView(R.id.mrvBoutique)
+    RecyclerView mrvBoutique;
+    @BindView(R.id.mRefreshLayout)
+    SwipeRefreshLayout mRefreshLayout;
+
     GridLayoutManager mlayout;
     GoodsAdapter mAdapter;
     ArrayList<NewGoodsBean> mList;
@@ -50,24 +50,22 @@ public class NewGoodsFragment extends Fragment {
     final static int ACTION_UP = 1;//上拉加载
     final static int ACTION_DOWN = 2;//下拉刷新
     int mNewState;
-    public NewGoodsFragment() {
+    public BoutiqueFragment() {
         // Required empty public constructor
     }
-
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
+        View view = inflater.inflate(R.layout.fragment_boutique, container, false);
         ButterKnife.bind(this, view);
-        initView();
         model = new ModelNewGoods();
         initData(ACTION_LOADING);//下载数据
         setListener();
         return view;
     }
-
     private void setListener() {
         mlayoutSpanSizeLookup();//解决最后页脚不能在中心的原因
         setPulldown();
@@ -88,12 +86,12 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void setRefreshDown() {
-        tvRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                tvRefreshLayout.setRefreshing(true);//转动东西开始
-                tvRefreshLayout.setEnabled(true);
-                tvRefreshHint.setVisibility(View.VISIBLE);
+                mRefreshLayout.setRefreshing(true);//转动东西开始
+                mRefreshLayout.setEnabled(true);
+                mRefreshHint.setVisibility(View.VISIBLE);
                 pageId = 1;
                 initData(ACTION_DOWN);
             }
@@ -101,7 +99,7 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void setPulldown() {
-        rvContact.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mrvBoutique.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -118,7 +116,7 @@ public class NewGoodsFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);//解决停止的数据
   /*              int firstPostion = mlayout.findFirstVisibleItemPosition();//可见的第一行，判断是否为第一行，
-                tvRefreshLayout.setEnabled(firstPostion == 0);//来判断*/
+                mRefreshLayout.setEnabled(firstPostion == 0);//来判断*/
             }
         });
     }
@@ -147,8 +145,8 @@ public class NewGoodsFragment extends Fragment {
                         break;
                     case ACTION_DOWN://下拉刷新
                         mAdapter.initData(list);
-                        tvRefreshHint.setVisibility(View.GONE);
-                        tvRefreshLayout.setRefreshing(false);//不可见
+                        mRefreshHint.setVisibility(View.GONE);
+                        mRefreshLayout.setRefreshing(false);//不可见
                         ImageLoader.release();
                         break;
                 }
@@ -162,13 +160,13 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initView() {
-        tvRefreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
-        rvContact.setHasFixedSize(true);//自动，保尺寸是通过用户输入从而确保RecyclerView的尺寸是一个常数.
+        mRefreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
+        mrvBoutique.setHasFixedSize(true);//自动，保尺寸是通过用户输入从而确保RecyclerView的尺寸是一个常数.
         mList = new ArrayList<>();
         mAdapter = new GoodsAdapter(getActivity(),mList);
-        rvContact.setAdapter(mAdapter);
-        rvContact.addItemDecoration(new SpaceItemDecoration(40));
+        mrvBoutique.setAdapter(mAdapter);
+        mrvBoutique.addItemDecoration(new SpaceItemDecoration(40));
         mlayout = new GridLayoutManager(getActivity(), I.COLUM_NUM);//每行显示2个
-        rvContact.setLayoutManager(mlayout);
+        mrvBoutique.setLayoutManager(mlayout);
     }
 }

@@ -18,7 +18,7 @@ public class ModelNewGoods implements IModelNewGoods {
                 .addParam(I.CategoryGood.CAT_ID, String.valueOf(cartId))
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
 //                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
-                .addParam(I.PAGE_SIZE,String.valueOf(4))
+                .addParam(I.PAGE_SIZE,String.valueOf(6))
                 .targetClass(NewGoodsBean[].class)
                 .execute(listener);
     }
