@@ -68,8 +68,22 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void setListener() {
+        mlayoutSpanSizeLookup();//解决最后页脚不能在中心的原因
         setPulldown();
         setRefreshDown();
+    }
+
+    private void mlayoutSpanSizeLookup() {
+        mlayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == mAdapter.getItemCount()-1){
+                    return 2;
+                }else{
+                 return 1;
+                }
+            }
+        });
     }
 
     private void setRefreshDown() {
