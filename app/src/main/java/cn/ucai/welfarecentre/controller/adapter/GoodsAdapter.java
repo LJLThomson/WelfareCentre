@@ -15,6 +15,7 @@ import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.view.FooterViewHodler;
+import cn.ucai.welfarecentre.view.MFGT;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -68,8 +69,8 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_FOOTER){
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (getItemViewType(position) == TYPE_FOOTER){//页脚
             FooterViewHodler footerViewHodler = (FooterViewHodler) holder;
 //            footerViewHodler.footer.setText(footerText);
             footerViewHodler.footer.setText(context.getString(getFooterText()));
@@ -78,7 +79,12 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         NewGoodsBean goods = contactList.get(position);//
         NewGoodsViewHolder newGoodsViewHolder = (NewGoodsViewHolder) holder;
-
+        newGoodsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MFGT.gotoGoodsDetailsActitivity(context,contactList.get(position).getGoodsId());
+            }
+        });
         newGoodsViewHolder.Newgoods.setText(goods.getColorName());
         newGoodsViewHolder.good_price.setText(goods.getCurrencyPrice());
         ImageLoader.downloadImg(context,newGoodsViewHolder.ipicture,goods.getGoodsThumb());
@@ -86,7 +92,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return contactList == null?0:contactList.size()+1;
+        return contactList == null?0:contactList.size()+1;//contactList总长度
     }
 
     @Override

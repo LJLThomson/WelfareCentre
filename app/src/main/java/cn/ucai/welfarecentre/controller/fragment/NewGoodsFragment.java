@@ -40,6 +40,7 @@ public class NewGoodsFragment extends Fragment {
     RecyclerView rvContact;
     @BindView(R.id.tvRefreshLayout)
     SwipeRefreshLayout tvRefreshLayout;
+
     GridLayoutManager mlayout;
     GoodsAdapter mAdapter;
     ArrayList<NewGoodsBean> mList;
@@ -124,8 +125,9 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initData(final int action) {
-//        ddwnData下载
-        model.downData(getContext(), I.CAT_ID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
+//        ddwnData下载 ,I.CAT_ID 默认为0
+        int cartId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID,I.CAT_ID);
+        model.downData(getContext(),cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mAdapter.setMore(result !=null && result.length>0);//不到最后全为true，
