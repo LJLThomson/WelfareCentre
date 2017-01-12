@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <include layout="@layout/goods_detailsinclude"/>
     <LinearLayout
@@ -29,14 +29,24 @@
             android:textColor="#f10"
             android:textSize="20sp"/>
     </LinearLayout>
+    <cn.ucai.welfarecentre.view.SlideAutoLoopView
+        android:id="@+id/GoodsDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="374dp"
-        android:layout_height="250dp"
-        android:layout_weight="0.45"
-        android:scaleType="fitXY"
-        android:src="@drawable/nopic"/>
+    </cn.ucai.welfarecentre.view.SlideAutoLoopView>
+
+    <cn.ucai.welfarecentre.view.FlowIndicator
+        android:id="@+id/flowIndicator"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:r="8dp"
+        app:count="3"
+        app:space="30dp"
+        app:normal_color="#ccc"
+        app:focus_color="#f10"/>
     <WebView
         android:id="@+id/mwebView"
         android:layout_width="wrap_content"
