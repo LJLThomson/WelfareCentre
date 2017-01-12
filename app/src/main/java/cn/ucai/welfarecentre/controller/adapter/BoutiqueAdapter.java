@@ -1,6 +1,8 @@
 package cn.ucai.welfarecentre.controller.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,13 @@ import java.util.ArrayList;
 
 import cn.ucai.welfarecentre.Model.bean.BoutiqueBean;
 ;
+import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
+import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.controller.activity.BoutiqueActivity;
 import cn.ucai.welfarecentre.view.FooterViewHodler;
+import cn.ucai.welfarecentre.view.MFGT;
 
 /**
  * Created by Administrator on 2017/1/11 0011.
@@ -27,6 +33,8 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     final int TYPE_FOOTER = 1;
     boolean isMore;//由来判断是否到最后了，这时没有数据可加载了
     String footerText;
+
+
 
     public int getFooterText() {
         return isMore ? R.string.load_more : R.string.no_more;
@@ -68,7 +76,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_FOOTER) {
             FooterViewHodler footerViewHodler = (FooterViewHodler) holder;
             footerViewHodler.footer.setText(footerText);
@@ -76,10 +84,19 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            footerViewHodler.footer.setText(context.getString(id));//可以获取string.xml中的文件
             return;
         }
-        BoutiqueBean boutiques = contactList.get(position);//
+        final BoutiqueBean boutiques = contactList.get(position);//
         BoutiqueViewHolder boutiqueViewHolder = (BoutiqueViewHolder) holder;
+        boutiqueViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                context.startActivity(new Intent(context, BoutiqueActivity.class)
+//                .putExtra(I.NewAndBoutiqueGoods.CAT_ID,contactList.get(position).getId()));
+                MFGT.gotoBoutiqueChild(context,boutiques);
+            }
+        });
         boutiqueViewHolder.mtitle.setText(boutiques.getTitle());
         boutiqueViewHolder.mdescription.setText(boutiques.getDescription());
+        boutiqueViewHolder.mname.setText(boutiques.getName());
 //        http://101.251.196.90:8000/FuLiCenterServerV2.0/downloadImage?imageurl=23，下载图片的接口
         ImageLoader.downloadImg(context,boutiqueViewHolder.imageurl,boutiques.getImageurl());
     }

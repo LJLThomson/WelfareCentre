@@ -2,6 +2,7 @@ package cn.ucai.welfarecentre.Model.net;
 
 import android.content.Context;
 
+import cn.ucai.welfarecentre.Model.bean.BoutiqueBean;
 import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 
 
@@ -10,5 +11,7 @@ import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
  */
 
 public interface IModelNewGoods {
-    void downData(Context context,int cartId,int pageId,OnCompleteListener<NewGoodsBean[]> listener);
+    void downData(Context context,int cartId,int pageId,OnCompleteListener listener);
+    void downBoutique(Context context,OnCompleteListener listener);
+    void downGoodsDetails(Context context,int good_id,OnCompleteListener listener);
 }

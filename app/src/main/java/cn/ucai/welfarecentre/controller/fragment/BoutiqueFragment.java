@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
+import cn.ucai.welfarecentre.Model.bean.BoutiqueBean;
 import cn.ucai.welfarecentre.Model.net.ModelNewGoods;
 import cn.ucai.welfarecentre.Model.net.OnCompleteListener;
 import cn.ucai.welfarecentre.Model.utils.ConvertUtils;
@@ -24,7 +25,7 @@ import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.Model.utils.L;
 import cn.ucai.welfarecentre.R;
-import cn.ucai.welfarecentre.controller.adapter.GoodsAdapter;
+import cn.ucai.welfarecentre.controller.adapter.BoutiqueAdapter;
 import cn.ucai.welfarecentre.view.SpaceItemDecoration;
 
 /**
@@ -41,19 +42,19 @@ public class BoutiqueFragment extends Fragment {
     SwipeRefreshLayout mRefreshLayout;
 
     GridLayoutManager mlayout;
-    GoodsAdapter mAdapter;
-    ArrayList<NewGoodsBean> mList;
+    BoutiqueAdapter mAdapter;
+    ArrayList<BoutiqueBean> mList;
     ModelNewGoods model;
 
-    int pageId = 1;//默认是0，页面pageSize默认是10页，也可以根据自行调整
     final static int ACTION_LOADING = 0;
     final static int ACTION_UP = 1;//上拉加载
     final static int ACTION_DOWN = 2;//下拉刷新
     int mNewState;
+
     public BoutiqueFragment() {
         // Required empty public constructor
     }
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,28 +62,15 @@ public class BoutiqueFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_boutique, container, false);
         ButterKnife.bind(this, view);
+        initView();
         model = new ModelNewGoods();
         initData(ACTION_LOADING);//下载数据
         setListener();
         return view;
     }
-    private void setListener() {
-        mlayoutSpanSizeLookup();//解决最后页脚不能在中心的原因
-        setPulldown();
-        setRefreshDown();
-    }
 
-    private void mlayoutSpanSizeLookup() {
-        mlayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                if (position == mAdapter.getItemCount()-1){
-                    return 2;//跨两列
-                } else{
-                    return 1;
-                }
-            }
-        });
+    private void setListener() {
+        setRefreshDown();
     }
 
     private void setRefreshDown() {
@@ -92,40 +80,15 @@ public class BoutiqueFragment extends Fragment {
                 mRefreshLayout.setRefreshing(true);//转动东西开始
                 mRefreshLayout.setEnabled(true);
                 mRefreshHint.setVisibility(View.VISIBLE);
-                pageId = 1;
                 initData(ACTION_DOWN);
             }
         });
     }
 
-    private void setPulldown() {
-        mrvBoutique.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                mNewState = newState;
-                int lastPosition = mlayout.findLastVisibleItemPosition();
-                if (lastPosition >= mAdapter.getItemCount()-1 && mNewState == RecyclerView.SCROLL_STATE_IDLE
-                        && mAdapter.isMore()){//只有lastPosition>= mAdapter.getItemCount-1时，才会加载，
-                    pageId++;
-                    initData(ACTION_UP);
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);//解决停止的数据
-  /*              int firstPostion = mlayout.findFirstVisibleItemPosition();//可见的第一行，判断是否为第一行，
-                mRefreshLayout.setEnabled(firstPostion == 0);//来判断*/
-            }
-        });
-    }
-
     private void initData(final int action) {
-//        ddwnData下载
-        model.downData(getContext(), I.CAT_ID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
+        model.downBoutique(getActivity(), new OnCompleteListener<BoutiqueBean[]>() {
             @Override
-            public void onSuccess(NewGoodsBean[] result) {
+            public void onSuccess(BoutiqueBean[] result) {
                 mAdapter.setMore(result !=null && result.length>0);//不到最后全为true，
                 if (!mAdapter.isMore()){//最后一页
                     if (action == ACTION_UP){
@@ -133,28 +96,28 @@ public class BoutiqueFragment extends Fragment {
                     }
                     return;
                 }
-                mAdapter.setFooterText("加载数据");
-                ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                L.i(TAG,"List.size =  "+ list.size());
-                switch (action){
-                    case ACTION_LOADING://第一次加载
-                        mAdapter.initData(list);
-                        break;
-                    case ACTION_UP://上拉加载
-                        mAdapter.addinitData(list);
-                        break;
-                    case ACTION_DOWN://下拉刷新
-                        mAdapter.initData(list);
-                        mRefreshHint.setVisibility(View.GONE);
-                        mRefreshLayout.setRefreshing(false);//不可见
-                        ImageLoader.release();
-                        break;
-                }
+                    mAdapter.setFooterText("加载数据");
+                    ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
+                    L.i(TAG,"List.size =  "+ list.size());
+                    switch (action){
+                        case ACTION_LOADING://第一次加载
+                            mAdapter.initData(list);
+                            break;
+                        case ACTION_UP://上拉加载
+                            mAdapter.addinitData(list);
+                            break;
+                        case ACTION_DOWN://下拉刷新
+                            mAdapter.initData(list);
+                            mRefreshHint.setVisibility(View.GONE);
+                            mRefreshLayout.setRefreshing(false);//不可见
+                            ImageLoader.release();
+                            break;
+                    }
             }
 
             @Override
             public void onError(String error) {
-                L.i(TAG,"error = "+ error);
+
             }
         });
     }
@@ -163,10 +126,11 @@ public class BoutiqueFragment extends Fragment {
         mRefreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
         mrvBoutique.setHasFixedSize(true);//自动，保尺寸是通过用户输入从而确保RecyclerView的尺寸是一个常数.
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(getActivity(),mList);
+        mAdapter = new BoutiqueAdapter(getActivity(),mList);
         mrvBoutique.setAdapter(mAdapter);
         mrvBoutique.addItemDecoration(new SpaceItemDecoration(40));
-        mlayout = new GridLayoutManager(getActivity(), I.COLUM_NUM);//每行显示2个
+        mlayout = new GridLayoutManager(getActivity(), 1);//每行显示2个
         mrvBoutique.setLayoutManager(mlayout);
     }
+
 }
