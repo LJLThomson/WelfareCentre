@@ -2,6 +2,7 @@ package cn.ucai.welfarecentre.controller.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.controller.fragment.BoutiqueFragment;
+import cn.ucai.welfarecentre.controller.fragment.CategoryFragment;
 import cn.ucai.welfarecentre.controller.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,22 +37,36 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.personCentre)
     RadioButton personCentre;
 
+    NewGoodsFragment mNewGoodsFragment;
+    BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mcategoryFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.add(R.id.frameLayout, new NewGoodsFragment()).commit();//开始默认页面
-        transaction.add(R.id.frameLayout,new BoutiqueFragment()).commit();
     }
 
     private void initView() {
         rad = new RadioButton[5];
         fragments = new Fragment[5];
-        fragments[1] = new BoutiqueFragment();
-        fragments[0] = new NewGoodsFragment();
+        mBoutiqueFragment = new BoutiqueFragment();
+        mNewGoodsFragment = new NewGoodsFragment();
+        mcategoryFragment = new CategoryFragment();
+        fragments[0] = mNewGoodsFragment;
+        fragments[1] = mBoutiqueFragment;
+        fragments[2] = mcategoryFragment;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        使用add，hide，show时默认开始要将它们所有
+        transaction.add(R.id.frameLayout, mNewGoodsFragment)
+                .add(R.id.frameLayout, mBoutiqueFragment)
+                .add(R.id.frameLayout, mcategoryFragment)
+                .show(mNewGoodsFragment)
+                .hide(mBoutiqueFragment)
+                .hide(mcategoryFragment)
+                .commit();//开始默认页面
 
         rad[0] = newGoods;
         rad[1] = boutique;
@@ -77,37 +93,28 @@ public class MainActivity extends AppCompatActivity {
                 index = 4;
                 break;
         }
-        setSingleSelected(index);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragments[index]).commit();
-    /*    if (currentIndex != index) {//相等就无效
-            currentIndex2 = currentIndex;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            setSingleSelected(index);
-            if (!fragments[index].isAdded()) {//没有添加,则添加
-                ft.add(R.id.frameLayout, fragments[index]);
-            }
-            ft.show(fragments[index])
-                    .hide(fragments[currentIndex2]);//显示这次，隐藏上次
-            ft.commit();
-    }*/
-   /*     if (currentIndex != index){
+
+        if (currentIndex != index) {
             setFragment();
             setSingleSelected(index);
-        }*/
+        }
     }
 
     private void setFragment() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         if (!fragments[index].isAdded()) {//没有添加,则添加
             ft.add(R.id.frameLayout, fragments[index]);
         }
-        ft.show(fragments[index])
-                .hide(fragments[currentIndex]);//显示这次，隐藏上次
+//        ft.show(fragments[index])
+//                .hide(fragments[currentIndex]);//显示这次，隐藏上次
+        ft.hide(fragments[currentIndex]).show(fragments[index]);
         ft.commit();
     }
 
     private void setSingleSelected(int index) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < rad.length; i++) {
             if (index == i) {
                 rad[i].setChecked(true);
             } else {

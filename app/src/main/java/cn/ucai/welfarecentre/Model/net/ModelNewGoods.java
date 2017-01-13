@@ -3,6 +3,8 @@ package cn.ucai.welfarecentre.Model.net;
 import android.content.Context;
 
 import cn.ucai.welfarecentre.Model.bean.BoutiqueBean;
+import cn.ucai.welfarecentre.Model.bean.CategoryChildBean;
+import cn.ucai.welfarecentre.Model.bean.CategoryGroupBean;
 import cn.ucai.welfarecentre.Model.bean.GoodsDetailsBean;
 import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 import cn.ucai.welfarecentre.Model.utils.I;
@@ -39,6 +41,23 @@ public class ModelNewGoods implements IModelNewGoods {
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                 .addParam(I.Goods.KEY_GOODS_ID ,""+good_id)
                 .targetClass(GoodsDetailsBean.class)
+                .execute(listener);
+    }
+
+    @Override
+    public void downGroupCategory(Context context, OnCompleteListener listener) {
+        OkHttpUtils<CategoryGroupBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
+                .targetClass(CategoryGroupBean[].class)
+                .execute(listener);
+    }
+
+    @Override
+    public void downCategory(Context context, int category_id, OnCompleteListener listener) {
+        OkHttpUtils<CategoryChildBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
+                .addParam(I.CategoryChild.PARENT_ID,String.valueOf(category_id))
+                .targetClass(CategoryChildBean[].class)
                 .execute(listener);
     }
 }
