@@ -4,10 +4,12 @@ package cn.ucai.welfarecentre.controller.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +54,33 @@ public class CategoryFragment extends Fragment {
         model = new ModelNewGoods();
         initView();
         initData();//获得数据
+        setListener();
         return view;
+    }
+
+    private void setListener() {
+        elv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
+                CategoryGroupBean app = (CategoryGroupBean) expandableListView.getItemAtPosition(groupPosition);
+                Toast.makeText(getActivity(), app.getName() + "被点击", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+ /*       elv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long childId) {
+      *//*          view.setOnClickListener(new View.OnClickListener() {//双击调用,view指的是当前itemView
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "未来的世界不是很好", Toast.LENGTH_SHORT).show();
+                    }
+                });*//*
+                CategoryChildBean app = (CategoryChildBean) expandableListView.getItemAtPosition(childPosition);
+                Toast.makeText(getActivity(), app.getName() + "被点击", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });*/
     }
 
     private void initView() {
@@ -60,23 +88,25 @@ public class CategoryFragment extends Fragment {
 //        //去掉前面的箭头图标
         elv.setGroupIndicator(null);
         groupList = new ArrayList<>();
-        childList = new ArrayList<ArrayList<CategoryChildBean>>();
+        childList = new ArrayList<>();
         mAdapter = new CategoryAdapter(getActivity(), groupList, childList);
         elv.setAdapter(mAdapter);
     }
-    int  category_id = 0;
+
+    int group_position;
+
     private void initData() {
         model.downGroupCategory(getActivity(), new OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
-       /*         for (int i=0;i<result.length;i++){
-                    groupList.add(result[i].getImageUrl());
-                }*/
                 if (result != null) {
                     groupList = ConvertUtils.array2List(result);
+
                     for (int i = 0; i < groupList.size(); i++) {
-//                        category_id = groupList.get(i).getId();
-                        childDownLoadData(groupList.get(i).getId());//将改组的图片下下来
+                        group_position = i;
+                        childList.add(new ArrayList<CategoryChildBean>());
+                        Log.e("main", "size:" + childList.size());
+                        childDownLoadData(groupList.get(i).getId(), group_position);//将改组的图片下下来
 //                        第二种方式，就是一次将childlist图片全部下载出来，CategoryChildBean[][];
 //                      这种方式，二维数组变成二维集合，采取下面的方式，一层一层剥削，
 //                        for(int i=0;i<childArray.length;i++) {//二维数组变成二维集合，策略
@@ -86,29 +116,33 @@ public class CategoryFragment extends Fragment {
 //                        }
                     }
                 }
-                mAdapter.addInitContactList(groupList,childList);
+                mAdapter.addInitContactList(groupList, childList);
             }
+
             @Override
             public void onError(String error) {
-//                category_id++;//倘若上面出错，可以继续下载
-//                childDownLoadData(category_id);
-                L.i(TAG,"groupList>>>>>"+error);
+   /*             group_position++;//倘若上面出错，可以继续下载
+                childDownLoadData(groupList.get(group_position).getId(), group_position);*/
+                L.i(TAG, "groupList>>>>>" + error);
             }
         });
     }
 
-    private void childDownLoadData(int category_id) {
+    private void childDownLoadData(int category_id, final int index) {
         model.downCategory(getActivity(), category_id, new OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
                 if (result != null) {
                     ArrayList<CategoryChildBean> list = ConvertUtils.array2List(result);
                     childList.add(list);
+                    Log.e("main", "childListsize:" + childList.size());
+//                    childList.set(index, list);
                 }
             }
+
             @Override
             public void onError(String error) {
-                L.i(TAG,">>>>>>>>>"+error);
+                L.i(TAG, ">>>>>>>>>" + error);
             }
         });
     }

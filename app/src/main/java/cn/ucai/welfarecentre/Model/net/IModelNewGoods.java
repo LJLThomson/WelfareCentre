@@ -16,4 +16,5 @@ public interface IModelNewGoods {
     void downGoodsDetails(Context context,int good_id,OnCompleteListener listener);
     void downGroupCategory(Context context,OnCompleteListener listener);
     void downCategory(Context context,int category_id,OnCompleteListener listener);
+    void downSecond_Category(Context context,int Second_CategoryId,int page_id,int page_size,OnCompleteListener listener);
 }

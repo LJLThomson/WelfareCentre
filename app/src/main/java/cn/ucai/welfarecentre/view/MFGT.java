@@ -9,6 +9,7 @@ import cn.ucai.welfarecentre.Model.bean.BoutiqueBean;
 import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.controller.activity.BoutiqueActivity;
+import cn.ucai.welfarecentre.controller.activity.CatagoryActivity;
 import cn.ucai.welfarecentre.controller.activity.GoodsDetailsAcitivity;
 
 /**
@@ -43,6 +44,12 @@ public class MFGT {
 //         Intent intent = new Intent(context,GoodsA)
         Intent intent = new Intent(context, GoodsDetailsAcitivity.class);
         intent.putExtra(I.NewAndBoutiqueGoods.CAT_ID,goodsId);
+        startActivity((AppCompatActivity)context,intent);
+    }
+    public static void gotoCatagoryActivity(Context context,int picId){
+        Intent  intent= new Intent(context, CatagoryActivity.class);
+        intent.putExtra(I.NewAndBoutiqueGoods.CAT_ID,picId);
+//        context.startActivity(intent);
         startActivity((AppCompatActivity)context,intent);
     }
 }

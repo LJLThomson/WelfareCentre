@@ -16,16 +16,27 @@ import cn.ucai.welfarecentre.Model.utils.OkHttpUtils;
 
 public class ModelNewGoods implements IModelNewGoods {
     @Override
-    public void downData(Context context, int cartId, int pageId, OnCompleteListener listener) {
+    public void downData(Context context,int cartId, int pageId, OnCompleteListener listener) {
 //        onCompleteListener为
-        OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);//可以直接得到pageData中的数据
-        utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
-                .addParam(I.CategoryGood.CAT_ID, String.valueOf(cartId))
-                .addParam(I.PAGE_ID, String.valueOf(pageId))
+        if (cartId == 0){
+            OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);//可以直接得到pageData中的数据
+            utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+                    .addParam(I.CategoryGood.CAT_ID, String.valueOf(cartId))
+                    .addParam(I.PAGE_ID, String.valueOf(pageId))
 //                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
-                .addParam(I.PAGE_SIZE,String.valueOf(4))
-                .targetClass(NewGoodsBean[].class)
-                .execute(listener);
+                    .addParam(I.PAGE_SIZE,String.valueOf(4))
+                    .targetClass(NewGoodsBean[].class)
+                    .execute(listener);
+        }else{
+            OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
+            utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
+                    .addParam(I.GoodsDetails.KEY_CAT_ID,String.valueOf(cartId))
+                    .addParam(I.PAGE_ID,String.valueOf(pageId))
+                    .addParam(I.PAGE_SIZE,String.valueOf(4))
+                    .targetClass(NewGoodsBean[].class)
+                    .execute(listener);
+        }
+
     }
 
     @Override
@@ -60,4 +71,17 @@ public class ModelNewGoods implements IModelNewGoods {
                 .targetClass(CategoryChildBean[].class)
                 .execute(listener);
     }
+
+    @Override
+    public void downSecond_Category(Context context, int Second_CategoryId, int page_id, int page_size, OnCompleteListener listener) {
+        OkHttpUtils<GoodsDetailsBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
+                .addParam(I.GoodsDetails.KEY_CAT_ID,String.valueOf(Second_CategoryId))
+                .addParam(I.PAGE_ID,String.valueOf(page_id))
+                .addParam(I.PAGE_SIZE,String.valueOf(page_size))
+                .targetClass(GoodsDetailsBean[].class)
+                .execute(listener);
+    }
+
+
 }

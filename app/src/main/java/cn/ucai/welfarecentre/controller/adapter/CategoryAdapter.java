@@ -2,10 +2,12 @@ package cn.ucai.welfarecentre.controller.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import cn.ucai.welfarecentre.Model.bean.CategoryGroupBean;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.Model.utils.L;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.view.MFGT;
 
 /**
  * Created by Administrator on 2017/1/13 0013.
@@ -28,8 +31,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          /*  int picId = view.getTag(R.id.ivChild);
-            Intent intent = new Intent(context,)*/
+            CategoryChildBean categoryChildBean = (CategoryChildBean) view.getTag(R.id.ivChild);
+            int picId = categoryChildBean.getId();
+            MFGT.gotoCatagoryActivity(context,picId);
         }
     };
 
@@ -86,6 +90,15 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ImageView ivGroup,ivExpand;
         TextView tv5;
     }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+ /*       for (int i=0;i<getGroupCount();i++){
+
+        }*/
+    }
+
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup viewGroup) {
         GroupViewHolder holder = null;
@@ -124,13 +137,22 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder.ivChild = (ImageView) convertView.findViewById(R.id.ivChild);
             holder.tv4 = (TextView) convertView.findViewById(R.id.tv4);
             convertView.setTag(holder);
+            convertView.setOnClickListener(onItemClickListener);
         }else{
             View view = convertView;
             holder = (ChildViewHolder) convertView.getTag();
+            convertView.setOnClickListener(onItemClickListener);
         }
         CategoryChildBean categoryChildBean = childList.get(groupPosition).get(childPosition);
         holder.tv4.setText(categoryChildBean.getName());
+        Log.i("main","categoryId"+convertView.getId());
         ImageLoader.downloadImg(context, holder.ivChild, childList.get(groupPosition).get(childPosition).getImageUrl());
+        convertView.setTag(R.id.ivChild,getChild(groupPosition,childPosition));
+     /*   convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });*/
         return convertView;
     }
 
