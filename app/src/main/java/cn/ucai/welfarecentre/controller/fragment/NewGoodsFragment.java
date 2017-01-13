@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +54,7 @@ public class NewGoodsFragment extends Fragment {
     final static int ACTION_UP = 1;//上拉加载
     final static int ACTION_DOWN = 2;//下拉刷新
     int mNewState;
+
     public NewGoodsFragment() {
         // Required empty public constructor
     }
@@ -79,9 +83,9 @@ public class NewGoodsFragment extends Fragment {
         mlayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (position == mAdapter.getItemCount()-1){
+                if (position == mAdapter.getItemCount() - 1) {
                     return 2;//跨两列
-                } else{
+                } else {
                     return 1;
                 }
             }
@@ -108,8 +112,8 @@ public class NewGoodsFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 mNewState = newState;
                 int lastPosition = mlayout.findLastVisibleItemPosition();
-                if (lastPosition >= mAdapter.getItemCount()-1 && mNewState == RecyclerView.SCROLL_STATE_IDLE
-                        && mAdapter.isMore()){//只有lastPosition>= mAdapter.getItemCount-1时，才会加载，
+                if (lastPosition >= mAdapter.getItemCount() - 1 && mNewState == RecyclerView.SCROLL_STATE_IDLE
+                        && mAdapter.isMore()) {//只有lastPosition>= mAdapter.getItemCount-1时，才会加载，
                     pageId++;
                     initData(ACTION_UP);
                 }
@@ -126,21 +130,21 @@ public class NewGoodsFragment extends Fragment {
 
     private void initData(final int action) {
 //        ddwnData下载 ,I.CAT_ID 默认为0
-        int cartId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID,I.CAT_ID);
-        model.downData(getContext(),cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
+        int cartId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, I.CAT_ID);
+        model.downData(getContext(), cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                mAdapter.setMore(result !=null && result.length>0);//不到最后全为true，
-                if (!mAdapter.isMore()){//最后一页
-                    if (action == ACTION_UP){
+                mAdapter.setMore(result != null && result.length > 0);//不到最后全为true，
+                if (!mAdapter.isMore()) {//最后一页
+                    if (action == ACTION_UP) {
                         mAdapter.setFooterText("没有数据可加载了");
                     }
                     return;
                 }
                 mAdapter.setFooterText("加载数据");
                 ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                L.i(TAG,"List.size =  "+ list.size());
-                switch (action){
+                L.i(TAG, "List.size =  " + list.size());
+                switch (action) {
                     case ACTION_LOADING://第一次加载
                         mAdapter.initData(list);
                         break;
@@ -158,7 +162,7 @@ public class NewGoodsFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-                L.i(TAG,"error = "+ error);
+                L.i(TAG, "error = " + error);
             }
         });
     }
@@ -167,10 +171,43 @@ public class NewGoodsFragment extends Fragment {
         tvRefreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW);
         rvContact.setHasFixedSize(true);//自动，保尺寸是通过用户输入从而确保RecyclerView的尺寸是一个常数.
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(getActivity(),mList);
+        mAdapter = new GoodsAdapter(getActivity(), mList);
         rvContact.setAdapter(mAdapter);
         rvContact.addItemDecoration(new SpaceItemDecoration(40));
         mlayout = new GridLayoutManager(getActivity(), I.COLUM_NUM);//每行显示2个
         rvContact.setLayoutManager(mlayout);
+    }
+
+    public void SortGoods(final int sortBy) {
+        Collections.sort(mList, new Comparator<NewGoodsBean>() {
+            @Override
+            public int compare(NewGoodsBean firstBean, NewGoodsBean secondBean) {
+                int result = 0;
+                switch (sortBy) {
+                    case I.SORT_BY_ADDTIME_ASC://大到小
+                        result = (int) (Long.parseLong(secondBean.getAddTime()) - Long.parseLong(firstBean.getAddTime()));
+                        break;
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result = (int) (Long.parseLong(firstBean.getAddTime()) - Long.parseLong(secondBean.getAddTime()));
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result = getPrice(secondBean.getCurrencyPrice()) - getPrice(firstBean.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result = getPrice(firstBean.getCurrencyPrice()) - getPrice(secondBean.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+        });
+        mAdapter.notifyDataSetChanged();
+    }
+
+    //
+    public int getPrice(String price) {
+        int p = 0;
+        p = Integer.valueOf(price.substring(price.indexOf("￥") + 1));
+        L.e("adapter","p="+ p);
+        return p;
     }
 }
