@@ -46,9 +46,10 @@ public class MFGT {
         intent.putExtra(I.NewAndBoutiqueGoods.CAT_ID,goodsId);
         startActivity((AppCompatActivity)context,intent);
     }
-    public static void gotoCatagoryActivity(Context context,int picId){
+    public static void gotoCatagoryActivity(Context context,int picId,String groupName){
         Intent  intent= new Intent(context, CatagoryActivity.class);
         intent.putExtra(I.NewAndBoutiqueGoods.CAT_ID,picId);
+        intent.putExtra("groupName",groupName);
 //        context.startActivity(intent);
         startActivity((AppCompatActivity)context,intent);
     }

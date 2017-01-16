@@ -27,7 +27,7 @@ public class ModelNewGoods implements IModelNewGoods {
                     .addParam(I.PAGE_SIZE,String.valueOf(4))
                     .targetClass(NewGoodsBean[].class)
                     .execute(listener);
-        }else{
+        }else{//专门用于得到二级页面的
             OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
             utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
                     .addParam(I.GoodsDetails.KEY_CAT_ID,String.valueOf(cartId))
