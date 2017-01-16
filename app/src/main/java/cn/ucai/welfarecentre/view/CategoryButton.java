@@ -55,6 +55,7 @@ public class CategoryButton extends ImageView {
         mGridView.setVerticalSpacing(10);//垂直控件之间的空间距离
         mGridView.setHorizontalSpacing(10);//水平控件之间的空间距离
         mGridView.setNumColumns(2);
+//        mGridView.setStretchMode();//设置缩放模式
         mGridView.setAdapter(mAdapter);
     }
 

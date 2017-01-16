@@ -14,6 +14,8 @@ import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.controller.activity.BoutiqueActivity;
 import cn.ucai.welfarecentre.controller.activity.CatagoryActivity;
 import cn.ucai.welfarecentre.controller.activity.GoodsDetailsAcitivity;
+import cn.ucai.welfarecentre.controller.activity.LoginActivity;
+import cn.ucai.welfarecentre.controller.activity.RegisterActivity;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -63,5 +65,16 @@ public class MFGT {
 //        intent.put
 //        context.startActivity(intent);
         startActivity((AppCompatActivity) context, intent);
+    }
+
+//    登录
+    public static void gotoLoginActivity(Context context){
+        Intent intent = new Intent(context, LoginActivity.class);
+        startActivity((AppCompatActivity) context,intent);
+    }
+//    注册
+    public static void gotoRegisterActivity(Context context){
+        Intent intent = new Intent(context, RegisterActivity.class);
+        startActivity((AppCompatActivity) context,intent);
     }
 }
