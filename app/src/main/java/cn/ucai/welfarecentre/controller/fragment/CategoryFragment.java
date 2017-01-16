@@ -65,14 +65,14 @@ public class CategoryFragment extends Fragment {
     }
 
     private void setListener() {
-        elv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+  /*      elv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
                 CategoryGroupBean app = (CategoryGroupBean) expandableListView.getItemAtPosition(groupPosition);
                 Toast.makeText(getActivity(), app.getName() + "被点击", Toast.LENGTH_SHORT).show();
                 return false;
             }
-        });
+        });*/
  /*       elv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long childId) {

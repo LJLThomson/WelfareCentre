@@ -184,10 +184,10 @@ public class NewGoodsFragment extends Fragment {
             public int compare(NewGoodsBean firstBean, NewGoodsBean secondBean) {
                 int result = 0;
                 switch (sortBy) {
-                    case I.SORT_BY_ADDTIME_ASC://大到小
+                    case I.SORT_BY_ADDTIME_ASC://从低到高
                         result = (int) (Long.parseLong(secondBean.getAddTime()) - Long.parseLong(firstBean.getAddTime()));
                         break;
-                    case I.SORT_BY_ADDTIME_DESC:
+                    case I.SORT_BY_ADDTIME_DESC://从高到低
                         result = (int) (Long.parseLong(firstBean.getAddTime()) - Long.parseLong(secondBean.getAddTime()));
                         break;
                     case I.SORT_BY_PRICE_ASC:
