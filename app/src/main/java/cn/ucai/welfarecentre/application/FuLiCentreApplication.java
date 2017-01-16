@@ -8,7 +8,15 @@ import android.app.Application;
 
 public class FuLiCentreApplication extends Application {
     private static FuLiCentreApplication instance;
+    private static String user;
+    public static String getUser() {
+        return user;
+    }
 
+    public static void setUser(String user) {
+        FuLiCentreApplication.user = user;
+    }
+    
     public FuLiCentreApplication() {
 
     }
