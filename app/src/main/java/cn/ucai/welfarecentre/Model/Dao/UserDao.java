@@ -25,9 +25,12 @@ public class UserDao {
         if (instance == null){
             instance = new UserDao();
         }
-        return instance;
+        return instance;//
     }
     public boolean SavaUser(User user){
         return DBManager.getInstance().savaUser(user);
+    }
+    public User getUser(String username){
+        return  DBManager.getInstance().getUser(username);
     }
 }

@@ -15,19 +15,19 @@ import cn.ucai.welfarecentre.Model.utils.I;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static  String FULICENTER_USER_TABLE_CREATE;
+    private static  String FULICENTER_USER_TABLE_CREATE;//创建table_name时，不能有.db后缀，不然报错
     private static DBOpenHelper instance;
     public static DBOpenHelper getInstance(Context context){
         if (instance == null){
             instance = new DBOpenHelper(context);
         }
-        return instance;
+        return instance;//单例模式
     }
     public DBOpenHelper(Context context) {
         super(context, getUserDataBaseName(), null, DATABASE_VERSION);
     }
     private static String getUserDataBaseName(){
-        return "cn.ucai.fulicenter.db";
+        return "cn.ucai.fulicenter.db";////数据库存储的地方名，
     }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

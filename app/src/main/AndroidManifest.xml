@@ -22,6 +22,9 @@
         <activity android:name=".controller.activity.BoutiqueActivity"/>
         <activity android:name=".controller.activity.GoodsDetailsAcitivity"/>
         <activity android:name=".controller.activity.CatagoryActivity"/>
+        <activity android:name=".controller.activity.LoginActivity"/>
+        <activity android:name=".controller.activity.RegisterActivity"/>
+        <activity android:name=".controller.activity.PersonalActivity"/>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package cn.ucai.welfarecentre.Model.Dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import cn.ucai.welfarecentre.Model.bean.User;
@@ -49,5 +50,18 @@ public class DBManager {
             return count != -1;
         }
         return false;
+    }
+
+    public User getUser(String userName) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        User user =null;
+        Cursor c = db
+                .query(UserDao.USER_TABLE_NAME,null,UserDao.USER_COLUMN_NAME + "like",new String[]{userName},null,null,null);
+        while(c.moveToNext()){
+            String name = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_NAME));
+            user = new User();
+            user.setMuserName(name);
+        }
+        return user;
     }
 }

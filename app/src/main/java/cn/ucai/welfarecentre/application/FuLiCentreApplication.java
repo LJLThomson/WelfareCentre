@@ -2,18 +2,20 @@ package cn.ucai.welfarecentre.application;
 
 import android.app.Application;
 
+import cn.ucai.welfarecentre.Model.bean.User;
+
 /**
  * Created by Administrator on 2017/1/11 0011.
  */
 
 public class FuLiCentreApplication extends Application {
     private static FuLiCentreApplication instance;
-    private static String user;
-    public static String getUser() {
+    private static User user;
+    public static User getUser() {
         return user;
     }
 
-    public static void setUser(String user) {
+    public static void setUser(User user) {
         FuLiCentreApplication.user = user;
     }
     
