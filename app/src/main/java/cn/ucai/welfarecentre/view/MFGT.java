@@ -3,6 +3,7 @@ package cn.ucai.welfarecentre.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ import cn.ucai.welfarecentre.controller.activity.BoutiqueActivity;
 import cn.ucai.welfarecentre.controller.activity.CatagoryActivity;
 import cn.ucai.welfarecentre.controller.activity.GoodsDetailsAcitivity;
 import cn.ucai.welfarecentre.controller.activity.LoginActivity;
+import cn.ucai.welfarecentre.controller.activity.PersonalActivity;
 import cn.ucai.welfarecentre.controller.activity.RegisterActivity;
+import cn.ucai.welfarecentre.controller.activity.SettingsActivity;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -75,6 +78,16 @@ public class MFGT {
 //    注册
     public static void gotoRegisterActivity(Context context){
         Intent intent = new Intent(context, RegisterActivity.class);
+        startActivity((AppCompatActivity) context,intent);
+    }
+//    个人中心
+    public static void gotoPersonalActivity(Context context){
+        Intent intent = new Intent(context, PersonalActivity.class);
+        startActivity((AppCompatActivity) context,intent);
+    }
+
+    public static void gotoSettingsActivity(Context context) {
+        Intent intent = new Intent(context, SettingsActivity.class);
         startActivity((AppCompatActivity) context,intent);
     }
 }

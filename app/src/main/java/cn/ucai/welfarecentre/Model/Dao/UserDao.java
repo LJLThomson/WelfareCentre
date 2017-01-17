@@ -1,7 +1,9 @@
 package cn.ucai.welfarecentre.Model.Dao;
 
 import cn.ucai.welfarecentre.Model.bean.User;
+import cn.ucai.welfarecentre.Model.utils.SharePrefrenceUtils;
 import cn.ucai.welfarecentre.application.FuLiCentreApplication;
+import cn.ucai.welfarecentre.controller.activity.Splash;
 
 /**
  * Created by Administrator on 2017/1/17 0017.
@@ -9,7 +11,7 @@ import cn.ucai.welfarecentre.application.FuLiCentreApplication;
  */
 
 public class UserDao {
-    public  static final String USER_TABLE_NAME = "t_fulicenter_user";
+    public static final String USER_TABLE_NAME = "t_fulicenter_user";
     public static final String USER_COLUMN_NAME = "m_user_name";
     public static final String USER_COLUMN_NICK = "m_user_nick";
     public static final String USER_COLUMN_AVATAR = "m_user_avatar_id";
@@ -18,19 +20,27 @@ public class UserDao {
     public static final String USER_COLUMN_AVATAR_TYPE = "m_user_avatar_type";
     public static final String USER_COLUMN_AVATAR_UPDATA_TIME = "m_user_update_time";
     private static UserDao instance;
-    public UserDao(){
+
+    public UserDao() {
         DBManager.onInit(FuLiCentreApplication.getInstance());
     }
-    public static UserDao getInstance(){
-        if (instance == null){
+
+    public static UserDao getInstance() {
+        if (instance == null) {
             instance = new UserDao();
         }
         return instance;//
     }
-    public boolean SavaUser(User user){
+
+    public boolean SavaUser(User user) {
         return DBManager.getInstance().savaUser(user);
     }
-    public User getUser(String username){
-        return  DBManager.getInstance().getUser(username);
+
+    public User getUser(String username) {
+        return DBManager.getInstance().getUser(username);
+    }
+
+    public boolean deleUser(String username) {
+        return DBManager.getInstance().deleteUser(username);
     }
 }

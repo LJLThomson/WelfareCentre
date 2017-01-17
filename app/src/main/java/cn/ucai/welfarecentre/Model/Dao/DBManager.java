@@ -56,12 +56,20 @@ public class DBManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         User user =null;
         Cursor c = db
-                .query(UserDao.USER_TABLE_NAME,null,UserDao.USER_COLUMN_NAME + "like",new String[]{userName},null,null,null);
+                .query(UserDao.USER_TABLE_NAME,null,UserDao.USER_COLUMN_NAME + " like ?",new String[]{userName},null,null,null);
         while(c.moveToNext()){
             String name = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_NAME));
+            String nick = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_NICK));
             user = new User();
             user.setMuserName(name);
+            user.setMuserName(nick);
         }
         return user;
+    }
+
+    public boolean deleteUser(String username) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        int count = db.delete(UserDao.USER_TABLE_NAME, UserDao.USER_COLUMN_NAME + " like ?", new String[]{username});
+        return count >0;
     }
 }

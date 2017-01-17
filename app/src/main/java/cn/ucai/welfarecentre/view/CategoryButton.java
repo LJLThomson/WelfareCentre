@@ -100,7 +100,15 @@ public class CategoryButton extends ImageView {
     class ClassiFicationAdapter extends BaseAdapter {
         Context context;
         ArrayList<CategoryChildBean> category_list;
-
+        View.OnClickListener onItemClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CategoryChildBean categoryChildBean = (CategoryChildBean) view.getTag(R.id.img4);
+                int picId = categoryChildBean.getId();
+                String groupname = categoryChildBean.getName();
+                MFGT.gotoCatagoryActivity(context,picId,groupname,category_list);
+            }
+        };
         public ClassiFicationAdapter(Context context, ArrayList<CategoryChildBean> category_list) {
             this.context = context;
             this.category_list = category_list;
@@ -132,7 +140,10 @@ public class CategoryButton extends ImageView {
             }else{
                 holder = (ClassiFicationViewHolder) convertView.getTag();
             }
+            convertView.setOnClickListener(onItemClickListener);
             CategoryChildBean mlist = category_list.get(position);
+            convertView.setTag(R.id.img4,mlist);
+
             holder.tv7.setText(mlist.getName());
             ImageLoader.downloadImg(context,holder.img4,mlist.getImageUrl());
             return convertView;
