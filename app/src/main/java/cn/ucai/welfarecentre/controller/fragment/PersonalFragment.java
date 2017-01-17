@@ -35,14 +35,13 @@ public class PersonalFragment extends Fragment {
     RelativeLayout centerTop;
     @BindView(R.id.tv_collect_count)
     TextView tvCollectCount;
+
     @BindView(R.id.layout_center_collect)
     LinearLayout layoutCenterCollect;
     @BindView(R.id.center_user_collects)
     RelativeLayout centerUserCollects;
     @BindView(R.id.iv_user_avatar)
     ImageView ivUserAvatar;
-    @BindView(R.id.tv_user_name)
-    TextView tvUserName;
     @BindView(R.id.iv_user_qrcode)
     ImageView ivUserQrcode;
     @BindView(R.id.center_user_info)
@@ -55,6 +54,8 @@ public class PersonalFragment extends Fragment {
     LinearLayout llUserStore;
     @BindView(R.id.ll_user_members)
     LinearLayout llUserMembers;
+    @BindView(R.id.tv_user_name)
+    TextView tvUserName;
 
     public PersonalFragment() {
         // Required empty public constructor
@@ -68,11 +69,20 @@ public class PersonalFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_personal, container, false);
         ButterKnife.bind(this, view);
 //        用户头像http://101.251.196.90:8000/FuLiCenterServerV2.0/downloadAvatar?name_or_hxid=12&avatarType=user_avatar&m_avatar_suffix=.jpg&width=60&height=60
-        // downloadAvatar();
+        downloadDefaultAvatar();
         return view;
     }
 
-    @OnClick({R.id.iv_persona_center_msg, R.id.center_user_collects,R.id.iv_user_avatar})
+    private void downloadDefaultAvatar() {
+//          图片下载，这里下载的是默认图片
+        User user = FuLiCentreApplication.getUser();
+        String avatar_img = ImageLoader.getAvatarUrl(user);
+        String nick = user.getMuserNick();
+        tvUserName.setText(nick);//设置昵称
+        ImageLoader.setAvatar(avatar_img, getActivity(), ivUserAvatar);
+    }
+
+    @OnClick({R.id.iv_persona_center_msg, R.id.center_user_collects, R.id.iv_user_avatar})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_persona_center_msg:
@@ -81,10 +91,7 @@ public class PersonalFragment extends Fragment {
             case R.id.center_user_collects:
                 break;
             case R.id.iv_user_avatar:
-//                图片下载
-                User user = FuLiCentreApplication.getUser();
-                String avatar_img = ImageLoader.getAvatarUrl(user);
-                ImageLoader.setAvatar(avatar_img,getActivity(),ivUserAvatar);
+//          弹出窗口，从相机或者拍照
                 break;
         }
     }
