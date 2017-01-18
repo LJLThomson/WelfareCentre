@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingLeft="20dp"
+              android:paddingRight="20dp">
+    <include layout="@layout/setting_include"/>
+    <EditText
+        android:id="@+id/et1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="汉字英文3-8位"
+        android:textColorHint="#f10"
+        android:textSize="20dp"/>
+    <Button
+        android:id="@+id/bt4"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ff2200"
+        android:text="保存"/>
+</LinearLayout>

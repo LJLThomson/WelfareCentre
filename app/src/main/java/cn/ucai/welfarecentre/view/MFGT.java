@@ -19,6 +19,7 @@ import cn.ucai.welfarecentre.controller.activity.LoginActivity;
 import cn.ucai.welfarecentre.controller.activity.PersonalActivity;
 import cn.ucai.welfarecentre.controller.activity.RegisterActivity;
 import cn.ucai.welfarecentre.controller.activity.SettingsActivity;
+import cn.ucai.welfarecentre.controller.activity.UpdateNick_Activity;
 
 /**
  * Created by Administrator on 2017/1/10 0010.
@@ -89,5 +90,9 @@ public class MFGT {
     public static void gotoSettingsActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
         startActivity((AppCompatActivity) context,intent);
+    }
+    public static void gotoUpdateNickActivity(Activity activity){
+        Intent intent = new Intent(activity, UpdateNick_Activity.class);
+        activity.startActivityForResult(intent,I.REQUEST_CODE_NICK);
     }
 }
