@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
     <include layout="@layout/goods_detailsinclude"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_gravity="center"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/tv1"
@@ -33,26 +33,25 @@
         android:id="@+id/GoodsDetails"
         android:layout_width="match_parent"
         android:layout_height="320dp">
-
     </cn.ucai.welfarecentre.view.SlideAutoLoopView>
 
     <cn.ucai.welfarecentre.view.FlowIndicator
         android:id="@+id/flowIndicator"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:r="8dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         app:count="3"
-        app:space="30dp"
+        app:focus_color="#f10"
         app:normal_color="#ccc"
-        app:focus_color="#f10"/>
+        app:r="8dp"
+        app:space="30dp"/>
     <WebView
         android:id="@+id/mwebView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="商品简介"
         android:layout_gravity="center"
+        android:text="商品简介"
         android:textSize="20sp"
     />
 

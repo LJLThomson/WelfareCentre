@@ -49,27 +49,26 @@
                     android:layout_marginTop="10dp"
                     android:background="#20000000">
 
-                    <RelativeLayout
-                        android:id="@+id/center_user_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true" android:layout_centerHorizontal="true">
+                    <LinearLayout android:id="@+id/center_user_info"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_alignParentTop="true"
+                                  android:orientation="horizontal"
+                                  android:layout_centerHorizontal="true">
                         <ImageView
                             android:id="@+id/iv_user_avatar"
-                            android:layout_width="60dip"
-                            android:layout_height="60dip"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentTop="true"
-                            android:layout_margin="8dip"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/contactlogo"/>
+                            android:scaleType="fitXY"
+                            android:src="@drawable/nopic"/>
                         <TextView
                             android:id="@+id/tv_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
                             android:layout_marginLeft="10dp"
-                            android:layout_toRightOf="@id/iv_user_avatar"
                             android:text="恋上猫女衣坊"
                             android:textColor="#ffffff"
                             android:textSize="18sp"/>
@@ -77,15 +76,15 @@
                             android:id="@+id/iv_user_qrcode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_toRightOf="@id/tv_user_name"
                             android:src="@drawable/tb_icon_home_qrcode_normal"/>
-                    </RelativeLayout>
+                    </LinearLayout>
                     <LinearLayout
-                        android:layout_below="@id/center_user_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/center_user_info"
                         android:orientation="horizontal"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp">

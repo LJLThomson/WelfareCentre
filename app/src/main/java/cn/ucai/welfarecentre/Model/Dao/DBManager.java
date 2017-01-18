@@ -54,15 +54,25 @@ public class DBManager {
 
     public User getUser(String userName) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        User user =null;
+        User user = null;
         Cursor c = db
-                .query(UserDao.USER_TABLE_NAME,null,UserDao.USER_COLUMN_NAME + " like ?",new String[]{userName},null,null,null);
-        while(c.moveToNext()){
+                .query(UserDao.USER_TABLE_NAME, null, UserDao.USER_COLUMN_NAME + " like ?", new String[]{userName}, null, null, null);
+        while (c.moveToNext()) {
             String name = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_NAME));
             String nick = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_NICK));
+            int muserId = c.getInt(c.getColumnIndex(UserDao.USER_COLUMN_AVATAR));
+            String mpath = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_AVATAR_PATH));
+            String suffix = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_AVATAR_SUFFIX));
+            int mType = c.getInt(c.getColumnIndex(UserDao.USER_COLUMN_AVATAR_TYPE));
+            String lastTime = c.getString(c.getColumnIndex(UserDao.USER_COLUMN_AVATAR_UPDATA_TIME));
             user = new User();
             user.setMuserName(name);
-            user.setMuserName(nick);
+            user.setMuserNick(nick);
+            user.setMavatarId(muserId);
+            user.setMavatarPath(mpath);
+            user.setMavatarSuffix(suffix);
+            user.setMavatarType(mType);
+            user.setMavatarLastUpdateTime(lastTime);
         }
         return user;
     }
@@ -70,6 +80,6 @@ public class DBManager {
     public boolean deleteUser(String username) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         int count = db.delete(UserDao.USER_TABLE_NAME, UserDao.USER_COLUMN_NAME + " like ?", new String[]{username});
-        return count >0;
+        return count > 0;
     }
 }

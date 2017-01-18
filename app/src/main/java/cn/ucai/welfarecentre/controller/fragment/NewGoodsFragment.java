@@ -129,7 +129,7 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initData(final int action) {
-//        ddwnData下载 ,I.CAT_ID 默认为0
+//        downData下载 ,I.CAT_ID 默认为0
         int cartId = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, I.CAT_ID);
         model.downData(getContext(), cartId, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override

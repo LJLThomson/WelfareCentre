@@ -7,9 +7,9 @@
                 android:paddingRight="20dp">
     <Button
         android:id="@+id/bt3"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="#ff2200"
         android:text="退出"/>
     <LinearLayout
@@ -33,6 +33,7 @@
                 android:text="用户头像"
                 android:textSize="20dp"/>
             <ImageView
+                android:id="@+id/img5"
                 android:layout_width="60dp"
                 android:layout_height="80dp"
                 android:src="@drawable/contactlogo"/>
@@ -52,9 +53,14 @@
                 android:gravity="center_vertical"
                 android:text="用户名" android:textSize="20dp"/>
             <TextView
+                android:id="@+id/tv11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="a123456"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:src="@drawable/right_arrow_icon"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/line6"
@@ -76,6 +82,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="a123456"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:src="@drawable/right_arrow_icon"/>
         </LinearLayout>
 
     </LinearLayout>

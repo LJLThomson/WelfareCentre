@@ -27,13 +27,14 @@
             android:id="@+id/tv_common_Title"
             android:layout_gravity="center_vertical"
             android:text= "商品详情"/>
-        <ImageView
+
+        <cn.ucai.welfarecentre.view.CategoryButton
             android:id="@+id/img1"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="150dp"
-            android:src="@mipmap/bg_cart_selected" />
+            android:src="@mipmap/arrow2_up" />
 
         <ImageView
             android:id="@+id/img2"
