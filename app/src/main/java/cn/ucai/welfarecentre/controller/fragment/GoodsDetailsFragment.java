@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.welfarecentre.Model.bean.GoodsDetailsBean;
 import cn.ucai.welfarecentre.Model.bean.MessageBean;
+import cn.ucai.welfarecentre.Model.bean.Result;
 import cn.ucai.welfarecentre.Model.bean.User;
 import cn.ucai.welfarecentre.Model.net.ModelNewGoods;
 import cn.ucai.welfarecentre.Model.net.OnCompleteListener;
@@ -62,7 +64,8 @@ public class GoodsDetailsFragment extends Fragment {
     @BindView(R.id.mwebView)
     WebView mwebView;
     int good_id;
-    boolean isCollect;
+    boolean isCollect = false;
+    int Collectcount;
 
     public GoodsDetailsFragment() {
         // Required empty public constructor
@@ -76,12 +79,12 @@ public class GoodsDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_goods_details, container, false);
         ButterKnife.bind(this, view);
         model = new ModelNewGoods();
+        good_id = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, 0);
         initData();
         return view;
     }
 
     private void initData() {
-        good_id = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, 0);
         model.downGoodsDetails(getActivity(), good_id, new OnCompleteListener<GoodsDetailsBean>() {
             @Override
             public void onSuccess(GoodsDetailsBean result) {
@@ -99,6 +102,7 @@ public class GoodsDetailsFragment extends Fragment {
         });
     }
 
+    //展示GoodsDetails
     private void showGoodsDetail(GoodsDetailsBean goods) {
         tv1.setText(goods.getGoodsName());
         tv2.setText(goods.getCurrencyPrice());
@@ -122,27 +126,48 @@ public class GoodsDetailsFragment extends Fragment {
     }
 
     @OnClick(R.id.img2)
-    public void onCollect() {
+    public void onCollect() {//收藏
         User user = FuLiCentreApplication.getUser();
         setCollect(user);
-        initCollectStatus(user);
-        MFGT.gotoLoginActivity(getActivity());
+        getCollectCount(user);//
+        if (user == null) {//如果user等于null，说明没有登录，转到登录界面
+            MFGT.gotoLoginActivity(getActivity());
+        }
+    }
+
+    private void getCollectCount(User user) {
+        model.getCollectCount(getActivity(), user.getMuserName(), new OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result != null && result.isSuccess()) {//计数成功
+                    Collectcount = Integer.parseInt(result.getMsg());
+//             发送广播       getActivity().sendBroadcast();
+                    MFGT.sendtoPersonalActivity(getActivity(), Collectcount);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setCollectStatus();
+        User user = FuLiCentreApplication.getUser();
+        initCollectStatus(user);//用于判断是否被收藏，收藏之后，显示红色
     }
 
     private void initCollectStatus(User user) {
-       String username= user.getMuserName();
         if (user != null) {
+            String username = user.getMuserName();
             model.isCollect(getActivity(), good_id, user.getMuserName(), new OnCompleteListener<MessageBean>() {
                 @Override
                 public void onSuccess(MessageBean result) {
                     if (result != null && result.isSuccess()) {
-                       isCollect = true;
+                        isCollect = true;
                     } else {
                         isCollect = false;
                     }
@@ -158,27 +183,30 @@ public class GoodsDetailsFragment extends Fragment {
     }
 
     private void setCollectStatus() {
-        if (isCollect) {
+        if (isCollect) {//红色
             img2.setImageResource(R.mipmap.bg_collect_out);
-        } else {
+        } else {//默认为白色
             img2.setImageResource(R.mipmap.bg_collect_in);
         }
     }
 
     public void setCollect(User user) {
-        model.setCollect(getActivity(), good_id, user.getMuserName(), isCollect ? I.ACTION_DELETE_COLLECT : I.ACTION_DELETE_COLLECT,
+//        收藏，再次点击，取反，true取消收藏，false添加收藏
+        model.setCollect(getActivity(), good_id, user.getMuserName(), isCollect ? I.ACTION_DELETE_COLLECT : I.ACTION_ADD_COLLECT,
                 new OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {
-                        if (result !=null &&result.isSuccess()){
-                            isCollect = !isCollect;
+//                        判断是否得到数据，
+                        if (result != null && result.isSuccess()) {
+                            isCollect = !isCollect;//取反，
                             CommonUtils.showLongToast(result.getMsg());
+                            setCollectStatus();
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-
+                        CommonUtils.showLongToast(error + "有错误");
                     }
                 });
     }

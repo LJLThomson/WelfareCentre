@@ -91,8 +91,16 @@ public class MFGT {
         Intent intent = new Intent(context, SettingsActivity.class);
         startActivity((AppCompatActivity) context,intent);
     }
+
     public static void gotoUpdateNickActivity(Activity activity){
         Intent intent = new Intent(activity, UpdateNick_Activity.class);
         activity.startActivityForResult(intent,I.REQUEST_CODE_NICK);
+    }
+
+    public static void sendtoPersonalActivity(Activity activity, int collectcount) {
+        Intent intent = new Intent("WelfareCentreCollectCount");//广播同一平台才行
+        intent.putExtra("CollectCount",collectcount);
+//        Intent intent = new Intent("CollectCount");
+        activity.sendBroadcast(intent);
     }
 }
