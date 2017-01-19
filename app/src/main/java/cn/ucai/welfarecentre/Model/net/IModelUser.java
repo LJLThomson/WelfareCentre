@@ -11,4 +11,6 @@ import cn.ucai.welfarecentre.Model.utils.OkHttpUtils;
 public interface IModelUser {
     void RegisterEnter(Context context, String userName, String NickName, String password, OnCompleteListener<String> OnCompleteListener);
     void LoginEnter(Context context, String userName,  String password, OnCompleteListener listener);
+    void UpdateNick(Context context,String userName,String nick,OnCompleteListener listener);
+
 }

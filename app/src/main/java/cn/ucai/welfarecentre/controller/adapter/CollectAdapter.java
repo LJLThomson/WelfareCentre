@@ -1,6 +1,7 @@
 package cn.ucai.welfarecentre.controller.adapter;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +16,17 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.welfarecentre.Model.bean.CollectBean;
+import cn.ucai.welfarecentre.Model.bean.MessageBean;
 import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
+import cn.ucai.welfarecentre.Model.bean.User;
 import cn.ucai.welfarecentre.Model.net.IModelNewGoods;
 import cn.ucai.welfarecentre.Model.net.ModelNewGoods;
+import cn.ucai.welfarecentre.Model.net.OnCompleteListener;
+import cn.ucai.welfarecentre.Model.utils.CommonUtils;
 import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.application.FuLiCentreApplication;
 import cn.ucai.welfarecentre.view.FooterViewHodler;
 import cn.ucai.welfarecentre.view.MFGT;
 
@@ -36,7 +42,6 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     boolean isMore;//由来判断是否到最后了，这时没有数据可加载了
     String footerText;
     IModelNewGoods model;
-
     public int getFooterText() {
         return isMore ? R.string.load_more : R.string.no_more;
     }
@@ -99,13 +104,40 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         collectViewHolder.imgdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                goods.getId();
                 deleteCollectGoods(position);
+                notifyCollectCount(goods.getGoodsId());//goodsId
             }
         });
     }
 
     private void deleteCollectGoods(int position) {
-        notifyItemRemoved(position);
+        contactList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    private void notifyCollectCount(int goodsId) {
+        model = new ModelNewGoods();
+       User user =  FuLiCentreApplication.getUser();
+        if (user!=null){
+            model.setCollect(context,goodsId,user.getMuserName(),I.ACTION_DELETE_COLLECT, new OnCompleteListener<MessageBean>(){
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        CommonUtils.showLongToast(result.getMsg());
+                        MFGT.sendtoPersonalActivity((Activity) context);
+                    } else{
+                      CommonUtils.showLongToast(result.getMsg());
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
+
     }
 
     @Override

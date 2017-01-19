@@ -8,5 +8,4 @@ import cn.ucai.welfarecentre.Model.utils.OkHttpUtils;
  */
 
 public interface OnCompleteListener<T> extends OkHttpUtils.OnCompleteListener<T>{
-
 }
