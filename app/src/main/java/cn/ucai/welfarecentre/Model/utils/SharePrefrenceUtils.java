@@ -28,4 +28,26 @@ public class SharePrefrenceUtils {
     public static String getUser(){
         return  Preference.getString(SHARE_PREFRENCE_NAME_USERNAME,null);
     }
+
+    public void savaAddress(String cusumerName, String phoneNumber, int city, String address) {
+        SharedPreferences.Editor editor = Preference.edit();
+        editor.putString("cusumerName",cusumerName);
+        editor.putString("phoneNumber",phoneNumber);
+        editor.putInt("city",city);
+        editor.putString("address",address);
+        editor.commit();
+    }
+
+    public static String getCusumerName(){
+        return  Preference.getString("cusumerName",null);
+    }
+    public static String getphoneNumber(){
+        return  Preference.getString("phoneNumber",null);
+    }
+    public static int getCity(){
+        return  Preference.getInt("city",-1);
+    }
+    public static String getAddress(){
+        return  Preference.getString("address",null);
+    }
 }

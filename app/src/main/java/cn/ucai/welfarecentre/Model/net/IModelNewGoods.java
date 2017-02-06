@@ -26,8 +26,8 @@ public interface IModelNewGoods {
 
     //    购物车
     void addCart(Context context, int goodsId, String userName, int count, OnCompleteListener<MessageBean> listener);
-    void getCart(Context context, String userName, OnCompleteListener<CartBean> listener);
+    void getCart(Context context, String userName, OnCompleteListener<CartBean[]> listener);
     void delCart(Context context,int cartId,OnCompleteListener<MessageBean> listener);
-    void updateCart(Context context,int cartId,int count,OnCompleteListener<MessageBean> listener);
-    void updateCart(Context context,int action,String userName,int goodsId,OnCompleteListener<MessageBean> listener);
+    void updateCart(Context context,int cartId,OnCompleteListener<MessageBean> listener);
+    void updateCart(Context context,int action,int cartId,String userName,int goodsId,OnCompleteListener<MessageBean> listener);
 }

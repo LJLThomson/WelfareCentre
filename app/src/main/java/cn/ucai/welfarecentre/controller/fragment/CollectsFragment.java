@@ -151,7 +151,7 @@ public class CollectsFragment extends Fragment {
                 @Override
                 public void onSuccess(CollectBean[] result) {
                     if (result != null) {//说明成功了
-                        if (!mAdapter.isMore()) {//最后一页
+                        if (mAdapter.isMore()) {//最后一页
                             if (action == ACTION_UP) {
                                 mAdapter.setFooterText("没有数据可加载了");
                             }

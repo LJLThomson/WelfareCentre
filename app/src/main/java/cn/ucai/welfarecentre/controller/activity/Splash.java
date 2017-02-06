@@ -29,7 +29,7 @@ public class Splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                一开始就调用，看看用户是否有已经存储的数据，
+//                一开始就调用，看看用户是否有已经存储的数据，ljl123456
                 String username = SharePrefrenceUtils.getInstance(Splash.this).getUser();
                 if (username !=null){
 //                    反问数据库，查找是否已经注册，已经注册，则为后面不需要注册跳转页面

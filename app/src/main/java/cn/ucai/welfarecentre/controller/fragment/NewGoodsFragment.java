@@ -135,7 +135,7 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mAdapter.setMore(result != null && result.length > 0);//不到最后全为true，
-                if (!mAdapter.isMore()) {//最后一页
+                if (!mAdapter.isMore()) {//最后一页，前面都是true，最后一个为false;
                     if (action == ACTION_UP) {
                         mAdapter.setFooterText("没有数据可加载了");
                     }

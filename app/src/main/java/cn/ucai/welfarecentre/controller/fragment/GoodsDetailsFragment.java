@@ -136,7 +136,9 @@ public class GoodsDetailsFragment extends Fragment {
     @OnClick(R.id.imgCart)
     public void addCart(){//购物车
         User user = FuLiCentreApplication.getUser();
-        if (user!=null){
+        if(user == null){//没有登录，则跳到登录界面
+            MFGT.gotoLoginActivity(getActivity());
+        }else{
             model.addCart(getActivity(), good_id, user.getMuserName(), 1, new OnCompleteListener<MessageBean>() {
                 @Override
                 public void onSuccess(MessageBean result) {

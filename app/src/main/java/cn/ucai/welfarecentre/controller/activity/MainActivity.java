@@ -1,10 +1,12 @@
 package cn.ucai.welfarecentre.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -12,10 +14,16 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.ucai.welfarecentre.Model.bean.User;
+import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.R;
+import cn.ucai.welfarecentre.application.FuLiCentreApplication;
 import cn.ucai.welfarecentre.controller.fragment.BoutiqueFragment;
+import cn.ucai.welfarecentre.controller.fragment.CartFragment;
 import cn.ucai.welfarecentre.controller.fragment.CategoryFragment;
 import cn.ucai.welfarecentre.controller.fragment.NewGoodsFragment;
+import cn.ucai.welfarecentre.controller.fragment.PersonalFragment;
+import cn.ucai.welfarecentre.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
     RadioButton[] rad;
@@ -40,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mcategoryFragment;
+    PersonalFragment mpersonalFragment;
+    CartFragment mcartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +65,26 @@ public class MainActivity extends AppCompatActivity {
         mBoutiqueFragment = new BoutiqueFragment();
         mNewGoodsFragment = new NewGoodsFragment();
         mcategoryFragment = new CategoryFragment();
+        mpersonalFragment = new PersonalFragment();
+        mcartFragment = new CartFragment();
+
         fragments[0] = mNewGoodsFragment;
         fragments[1] = mBoutiqueFragment;
         fragments[2] = mcategoryFragment;
+        fragments[3] = mcartFragment;
+        fragments[4] = mpersonalFragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        使用add，hide，show时默认开始要将它们所有
         transaction.add(R.id.frameLayout, mNewGoodsFragment)
                 .add(R.id.frameLayout, mBoutiqueFragment)
                 .add(R.id.frameLayout, mcategoryFragment)
+                .add(R.id.frameLayout, mcartFragment)
+                .add(R.id.frameLayout, mpersonalFragment)
                 .show(mNewGoodsFragment)
                 .hide(mBoutiqueFragment)
                 .hide(mcategoryFragment)
+                .hide(mcartFragment)
+                .hide(mpersonalFragment)
                 .commit();//开始默认页面
 
         rad[0] = newGoods;
@@ -90,7 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 index = 3;
                 break;
             case R.id.personCentre:
-                index = 4;
+//                if (FuLiCentreApplication.getUser()==null || FuLiCentreApplication.getUser().getMuserName()==null){
+                User user = FuLiCentreApplication.getUser();//user不等于null，
+                if (FuLiCentreApplication.getUser() == null) {
+                    MFGT.gotoLoginActivity(this);//跳转页面之后，后面程序不运行
+                } else {
+                    index = 4;
+                }
                 break;
         }
 
@@ -107,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
         if (!fragments[index].isAdded()) {//没有添加,则添加
             ft.add(R.id.frameLayout, fragments[index]);
         }
-//        ft.show(fragments[index])
-//                .hide(fragments[currentIndex]);//显示这次，隐藏上次
         ft.hide(fragments[currentIndex]).show(fragments[index]);
         ft.commit();
     }
@@ -121,6 +144,21 @@ public class MainActivity extends AppCompatActivity {
                 rad[i].setChecked(false);
             }
             currentIndex = index;//点击
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case I.REQUEST_CODE_LOGIN:
+                index = 4;
+                setFragment();
+                setSingleSelected(index);
+                break;
         }
     }
 }

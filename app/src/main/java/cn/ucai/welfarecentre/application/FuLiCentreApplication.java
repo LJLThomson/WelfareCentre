@@ -14,6 +14,7 @@ import cn.ucai.welfarecentre.Model.bean.User;
 public class FuLiCentreApplication extends Application {
     private static FuLiCentreApplication instance;
     private static User user;
+    private static HashMap<Integer, CartBean> myCartList;
 
     public static HashMap<Integer, CartBean> getMyCartList() {
         return myCartList;
@@ -23,10 +24,6 @@ public class FuLiCentreApplication extends Application {
         FuLiCentreApplication.myCartList = myCartList;
     }
 
-    private static HashMap<Integer,CartBean> myCartList;
-
-
-
     public static User getUser() {
         return user;
     }
@@ -34,12 +31,13 @@ public class FuLiCentreApplication extends Application {
     public static void setUser(User user) {
         FuLiCentreApplication.user = user;
     }
-    
+
     public FuLiCentreApplication() {
 
     }
-    public static FuLiCentreApplication getInstance(){
-        if (instance == null){
+
+    public static FuLiCentreApplication getInstance() {
+        if (instance == null) {
             instance = new FuLiCentreApplication();
         }
         return instance;

@@ -2,7 +2,6 @@ package cn.ucai.welfarecentre.Model.utils;
 
 import android.util.Log;
 
-
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import cn.ucai.welfarecentre.Model.bean.CartBean;
 import cn.ucai.welfarecentre.Model.bean.GoodsDetailsBean;
+import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 import cn.ucai.welfarecentre.Model.bean.Result;
 
 
@@ -113,7 +113,7 @@ public class ResultUtils {
                                 try {
                                     date = URLDecoder.decode(jsonRetData.toString(), I.UTF_8);
                                     Log.e("Utils", "jsonRetData=" + date);
-                                    GoodsDetailsBean g = new Gson().fromJson(date, GoodsDetailsBean.class);
+                                    NewGoodsBean g = new Gson().fromJson(date, NewGoodsBean.class);
                                     cart.setGoods(g);
 
                                 } catch (UnsupportedEncodingException e1) {

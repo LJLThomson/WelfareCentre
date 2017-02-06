@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.Model.utils.OkImageLoader;
 import cn.ucai.welfarecentre.R;
 
@@ -138,7 +139,9 @@ public class SlideAutoLoopView extends ViewPager {//自定义VIewPager，开始�
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = new ImageView(context);
+//            ImageView imageView = new SlideAutoLoopView(context);//图片不出来，原因是imageview没有指定位置
             container.addView(imageView);
+//
             OkImageLoader.build(goodsUrlList.get(position%goodsUrlList.size()))//计算
                     .width(160)
                     .height(400)

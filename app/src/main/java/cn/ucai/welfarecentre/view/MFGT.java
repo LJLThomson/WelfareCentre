@@ -14,11 +14,14 @@ import cn.ucai.welfarecentre.Model.utils.I;
 import cn.ucai.welfarecentre.R;
 import cn.ucai.welfarecentre.controller.activity.BoutiqueActivity;
 import cn.ucai.welfarecentre.controller.activity.CatagoryActivity;
+import cn.ucai.welfarecentre.controller.activity.CollectsActivity;
 import cn.ucai.welfarecentre.controller.activity.GoodsDetailsAcitivity;
 import cn.ucai.welfarecentre.controller.activity.LoginActivity;
+import cn.ucai.welfarecentre.controller.activity.OrderActivity;
 import cn.ucai.welfarecentre.controller.activity.PersonalActivity;
 import cn.ucai.welfarecentre.controller.activity.RegisterActivity;
 import cn.ucai.welfarecentre.controller.activity.SettingsActivity;
+import cn.ucai.welfarecentre.controller.activity.UpdateAvatarActvitiy;
 import cn.ucai.welfarecentre.controller.activity.UpdateNick_Activity;
 
 /**
@@ -97,10 +100,24 @@ public class MFGT {
         activity.startActivityForResult(intent,I.REQUEST_CODE_NICK);
     }
 
-    public static void sendtoPersonalActivity(Activity activity, int collectcount) {
+    public static void sendtoPersonalActivity(Activity activity) {
         Intent intent = new Intent("WelfareCentreCollectCount");//广播同一平台才行
-        intent.putExtra("CollectCount",collectcount);
-//        Intent intent = new Intent("CollectCount");
         activity.sendBroadcast(intent);
+    }
+
+    public static void gotoAvatarActivity(Activity settingsActivity) {
+        Intent intent = new Intent(settingsActivity, UpdateAvatarActvitiy.class);
+        startActivity(settingsActivity,intent);
+    }
+
+    public static void gotoCollects(Activity activity) {
+      Intent intent = new Intent(activity, CollectsActivity.class);
+        startActivity(activity,intent);
+    }
+
+    public static void gotoOrderActivity(Activity activity,int savaPrice) {
+        Intent intent = new Intent(activity, OrderActivity.class);
+        intent.putExtra(I.Cart.SAVAPRICE,savaPrice);
+        startActivity(activity,intent);
     }
 }

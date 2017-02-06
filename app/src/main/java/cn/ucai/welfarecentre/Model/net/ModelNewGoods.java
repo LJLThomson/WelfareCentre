@@ -143,7 +143,7 @@ public class ModelNewGoods implements IModelNewGoods {
                 .execute(listener);
     }
 
-    //    添加到购物车中
+    //    添加到购物车中，多次点击，数量逐步增1
 //    http://101.251.196.90:8000/FuLiCenterServerV2.0/addCart?goods_id=7276&userName=ljl123456&count=1&isChecked=1
     @Override
     public void addCart(Context context, int goodsId, String userName, int count, OnCompleteListener<MessageBean> listener) {
@@ -159,11 +159,11 @@ public class ModelNewGoods implements IModelNewGoods {
 //    找到勾选的物品
     //    http://101.251.196.90:8000/FuLiCenterServerV2.0/findCarts?userName=ljl123456
     @Override
-    public void getCart(Context context, String userName, OnCompleteListener<CartBean> listener) {
-        OkHttpUtils<CartBean> utils = new OkHttpUtils<>(context);
+    public void getCart(Context context, String userName, OnCompleteListener<CartBean[]> listener) {
+        OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CARTS)
                 .addParam(I.Cart.USER_NAME, userName)
-                .targetClass(CartBean.class)
+                .targetClass(CartBean[].class)
                 .execute(listener);
     }
 
@@ -178,25 +178,28 @@ public class ModelNewGoods implements IModelNewGoods {
                 .execute(listener);
     }
 //http://101.251.196.90:8000/FuLiCenterServerV2.0/updateCart?id=7276&count=1&isChecked=1
+//    更新购物车中商品信息，得到商品的信息
     @Override
-    public void updateCart(Context context, int cartId, int count, OnCompleteListener<MessageBean> listener) {
+    public void updateCart(Context context, int cartId,OnCompleteListener<MessageBean> listener) {
         OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_UPDATE_CART)
                 .addParam(I.Cart.ID, String.valueOf(cartId))
                 .addParam(I.Cart.COUNT,String.valueOf(cartId))
-                .addParam(I.Cart.IS_CHECKED,String.valueOf(count))
+                .addParam(I.Cart.IS_CHECKED,String.valueOf(false))
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }
 //用于判断删除还是添加
     @Override
-    public void updateCart(Context context, int action, String userName,int goodsId ,OnCompleteListener<MessageBean> listener) {
-        if (FuLiCentreApplication.getMyCartList().containsKey(goodsId)){
-            if (action == I.Cart.ACTION_CART_ADD){
-                delCart(context,0,listener);
+    public void updateCart(Context context, int action,int cartId, String userName,int goodsId ,OnCompleteListener<MessageBean> listener) {
+//        if (FuLiCentreApplication.getMyCartList().containsKey(goodsId)){
+            if (action == I.Cart.ACTION_CART_DEL){
+//               商品数量减1
+                delCart(context,cartId,listener);
             }else{
-//                updateCart(context,0,listener);
+//                商品数量加1
+                updateCart(context,cartId,listener);
             }
-        }
+//        }
     }
 }

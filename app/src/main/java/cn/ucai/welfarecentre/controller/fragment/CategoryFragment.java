@@ -150,6 +150,8 @@ public class CategoryFragment extends Fragment {
                     childList.add(new ArrayList<CategoryChildBean>());
                     childList.add(new ArrayList<CategoryChildBean>());
                     childList.add(new ArrayList<CategoryChildBean>());
+                    childList.add(new ArrayList<CategoryChildBean>());
+                    childList.add(new ArrayList<CategoryChildBean>());
                     Log.e("main", "childListsize:" + childList.size());
                     ArrayList<CategoryChildBean> list = ConvertUtils.array2List(result);
                     group_id++;

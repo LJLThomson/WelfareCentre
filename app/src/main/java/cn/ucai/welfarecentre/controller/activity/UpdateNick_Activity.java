@@ -83,12 +83,22 @@ public class UpdateNick_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         intent.putExtra(I.User.NICK,nick);
         setResult(RESULT_OK,intent);
+
+       User user = FuLiCentreApplication.getInstance().getUser();
+        user.setMuserName(nick);
+//                            数据库保存数据
+        boolean savaUser = UserDao.getInstance().SavaUser(user);
+//                            采用首选项保存数据
+        FuLiCentreApplication.getInstance().setUser(user);
+        savaUserNameAndPassword(userName, nick);
+
         updateNick(userName,nick);
     }
 
     private void updateNick(final String userName, final String nick) {
         final ProgressDialog dialog = new ProgressDialog(this);
         model = new ModelUser();
+//        更新，不会返回结果，只是对接口数据库中内容进行删改
         model.UpdateNick(this, userName, nick, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
@@ -98,14 +108,7 @@ public class UpdateNick_Activity extends AppCompatActivity {
                     if (result!=null){
                         if (result.isRetMsg()){
 //                            解析数据
-                            msg = R.string.update_user_nick_success;
-                            String json = result.getRetData().toString();
-                            Gson gson = new Gson();
-                            User user = gson.fromJson(json,User.class);
-//                            数据库保存数据
-                            boolean savaUser = UserDao.getInstance().SavaUser(user);
-//                            采用首选项保存数据
-                            savaUserNameAndPassword(userName, nick);
+                            msg = R.string.update_user_nick_success;;
                         }else{
                             if (result.getRetCode() ==I.MSG_USER_SAME_NICK
                                     || result.getRetCode() == I.MSG_USER_UPDATE_NICK_FAIL){

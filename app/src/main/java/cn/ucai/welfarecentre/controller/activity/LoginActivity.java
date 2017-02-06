@@ -11,14 +11,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.welfarecentre.Model.Dao.UserDao;
 import cn.ucai.welfarecentre.Model.bean.Result;
+import cn.ucai.welfarecentre.Model.bean.User;
 import cn.ucai.welfarecentre.Model.net.IModelUser;
 import cn.ucai.welfarecentre.Model.net.ModelUser;
 import cn.ucai.welfarecentre.Model.net.OnCompleteListener;
 import cn.ucai.welfarecentre.Model.utils.CommonUtils;
+import cn.ucai.welfarecentre.Model.utils.L;
 import cn.ucai.welfarecentre.Model.utils.ResultUtils;
 import cn.ucai.welfarecentre.Model.utils.SharePrefrenceUtils;
 import cn.ucai.welfarecentre.R;
@@ -56,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.activity_login)
     LinearLayout activityLogin;
     IModelUser modle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivReturn:
+//                MFGT.gotoGoodsDetailsActitivity();
+                MFGT.finish(LoginActivity.this);
                 break;
             case R.id.btnLogin:
                 checkOutInput();
@@ -83,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
     private void checkOutInput() {
         String userName = etUserName.getText().toString();
         String password = etPassword.getText().toString();
-        login(userName,password);
+        login(userName, password);
     }
 
     private void login(final String userName, final String password) {
@@ -92,19 +100,26 @@ public class LoginActivity extends AppCompatActivity {
         modle.LoginEnter(this, userName, password, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if (s !=null){
-                    Result result = ResultUtils.getResultFromJson(s,Result.class);
-                    if (result.isRetMsg()){
-                        savaUserNameAndPassword(userName,password);
+                if (s != null) {
+                    Gson gson = new Gson();
+//                    Result result = ResultUtils.getResultFromJson(s, Result.class);
+                    Result result = gson.fromJson(s,Result.class);
+                    if (result.isRetMsg()) {
+//                        数据储存
+                        String json = result.getRetData().toString();
+                        User user = gson.fromJson(json, User.class);
+                        boolean savaUser = UserDao.getInstance().SavaUser(user);
+
+                        savaUserNameAndPassword(userName, password);
+                        MFGT.gotoPersonalActivity(LoginActivity.this);
                         MFGT.finish(LoginActivity.this);
-                    }else{
+                    } else {
                         CommonUtils.showLongToast(getString(R.string.login_fail));
                     }
-                }else{
+                } else {
                     CommonUtils.showLongToast(getString(R.string.login_fail));
                 }
                 dialog.dismiss();
-
             }
 
             @Override
@@ -115,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void savaUserNameAndPassword(String userName,String password) {
+    //采用首选项保存数据
+    private void savaUserNameAndPassword(String userName, String password) {
         SharePrefrenceUtils sharePrefrenceUtils = SharePrefrenceUtils.getInstance(LoginActivity.this);
         sharePrefrenceUtils.savaUser(userName);
     }

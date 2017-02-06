@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.ucai.welfarecentre.Model.bean.NewGoodsBean;
 import cn.ucai.welfarecentre.Model.utils.ImageLoader;
 import cn.ucai.welfarecentre.R;
@@ -30,7 +32,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     String footerText;
 
     public int getFooterText() {
-        return isMore?R.string.load_more:R.string.no_more;
+        return isMore ? R.string.load_more : R.string.no_more;
     }
 
     public void setFooterText(String footerText) {
@@ -55,13 +57,13 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View view = null;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         RecyclerView.ViewHolder holder = null;
-        switch (viewType){
+        switch (viewType) {
             case TYPE_ITEM:
-                view = layoutInflater.inflate(R.layout.item_newgoods,parent,false);
+                view = layoutInflater.inflate(R.layout.item_newgoods, parent, false);
                 holder = new NewGoodsViewHolder(view);
                 break;
             case TYPE_FOOTER:
-                view = layoutInflater.inflate(R.layout.item_footer,parent,false);
+                view = layoutInflater.inflate(R.layout.item_footer, parent, false);
                 holder = new FooterViewHodler(view);
                 break;
         }
@@ -70,7 +72,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (getItemViewType(position) == TYPE_FOOTER){//页脚
+        if (getItemViewType(position) == TYPE_FOOTER) {//页脚
             FooterViewHodler footerViewHodler = (FooterViewHodler) holder;
 //            footerViewHodler.footer.setText(footerText);
             footerViewHodler.footer.setText(context.getString(getFooterText()));
@@ -82,30 +84,31 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         newGoodsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MFGT.gotoGoodsDetailsActitivity(context,contactList.get(position).getGoodsId());
+                MFGT.gotoGoodsDetailsActitivity(context, contactList.get(position).getGoodsId());
             }
         });
+
         newGoodsViewHolder.Newgoods.setText(goods.getColorName());
         newGoodsViewHolder.good_price.setText(goods.getCurrencyPrice());
-        ImageLoader.downloadImg(context,newGoodsViewHolder.ipicture,goods.getGoodsThumb());
+        ImageLoader.downloadImg(context, newGoodsViewHolder.ipicture, goods.getGoodsThumb());
     }
 
     @Override
     public int getItemCount() {
-        return contactList == null?0:contactList.size()+1;//contactList总长度
+        return contactList == null ? 0 : contactList.size() + 1;//contactList总长度
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == getItemCount() -1){
-            return  TYPE_FOOTER;
-        }else{
-            return  TYPE_ITEM;
+        if (position == getItemCount() - 1) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_ITEM;
         }
     }
 
     public void initData(ArrayList<NewGoodsBean> list) {
-        if (this.contactList != null){
+        if (this.contactList != null) {
             this.contactList.clear();
         }
         this.contactList.addAll(list);
@@ -117,14 +120,17 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    static class  NewGoodsViewHolder extends RecyclerView.ViewHolder{
+    static class NewGoodsViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.image)
         ImageView ipicture;
-        TextView Newgoods,good_price;
-        public NewGoodsViewHolder(View itemView) {
-            super(itemView);
-            ipicture = (ImageView) itemView.findViewById(R.id.image);
-            Newgoods = (TextView) itemView.findViewById(R.id.Newgoods);
-            good_price = (TextView) itemView.findViewById(R.id.good_price);
+        @BindView(R.id.Newgoods)
+        TextView Newgoods;
+        @BindView(R.id.good_price)
+        TextView good_price;
+
+        NewGoodsViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -137,7 +137,6 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
         }
-
     }
 
     @Override
