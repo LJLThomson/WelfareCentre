@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_enter.xml",
+        "source": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\res\\anim\\dialog_enter.xml"
+    },
+    {
+        "merged": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\anim\\cmbkb_push_bottom_out.xml",
+        "source": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\WelfareCentre.lib\\pingpp\\unspecified\\res\\anim\\cmbkb_push_bottom_out.xml"
+    },
+    {
+        "merged": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_exit.xml",
+        "source": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\res\\anim\\dialog_exit.xml"
+    },
+    {
+        "merged": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\res\\merged\\debug\\anim\\cmbkb_push_bottom_in.xml",
+        "source": "E:\\AndroidStudioProject\\WelfareCentre\\lib\\pingpp_one\\build\\intermediates\\exploded-aar\\WelfareCentre.lib\\pingpp\\unspecified\\res\\anim\\cmbkb_push_bottom_in.xml"
+    }
+]
