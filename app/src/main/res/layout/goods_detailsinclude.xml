@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:orientation="vertical"
-    android:background="#ffe100">
+    android:background="#ffe100"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/backClickArea"
         android:layout_width="wrap_content"
@@ -22,19 +22,26 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/backClickArea">
         <TextView
+            android:id="@+id/tv_common_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_common_Title"
             android:layout_gravity="center_vertical"
-            android:text= "商品详情"/>
+            android:text="商品详情"/>
 
         <cn.ucai.welfarecentre.view.CategoryButton
             android:id="@+id/img1"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="150dp"
-            android:src="@mipmap/arrow2_up" />
+            android:layout_marginLeft="120dp"
+            android:src="@mipmap/arrow2_up"/>
+        <ImageView
+            android:id="@+id/imgCart"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/bg_cart_selected"
+            android:layout_gravity="center_vertical"/>
 
         <ImageView
             android:id="@+id/img2"
@@ -42,7 +49,7 @@
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/bg_collect_in" />
+            android:src="@mipmap/bg_collect_in"/>
 
         <ImageView
             android:id="@+id/img3"
@@ -50,6 +57,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/bg_share_nor" />
+            android:src="@mipmap/bg_share_nor"/>
     </LinearLayout>
 </RelativeLayout>
